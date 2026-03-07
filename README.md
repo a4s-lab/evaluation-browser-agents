@@ -2,6 +2,12 @@
 
 Quick evaluation of browser agents, inspired by [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
+## Result
+
+| Agent | Model | Overall | Cost |
+| --- | --- | --- | --- |
+| [smooth](results/smooth.jsonl) | smooth | 11/26 (42.3%) | $2.15 |
+
 ## Usage
 
 ### Prerequisites
@@ -31,6 +37,26 @@ uv run --env-file .env scripts/eval_browser_use.py --model gpt-4o --no-headless 
 ```
 
 Results are saved to `results/browser-use.jsonl`.
+
+### smooth
+
+CIRCLEMIND_API_KEY should be set for smooth agent. Please refer to the [Smooth](https://docs.smooth.sh/quickstart) for more information.
+
+```bash
+# Run all tasks
+uv run --env-file .env scripts/eval_smooth.py
+
+# Run specific tasks
+uv run --env-file .env scripts/eval_smooth.py --task-id "Wolfram Alpha--1"
+
+# Use smooth-lite agent
+uv run --env-file .env scripts/eval_smooth.py --model smooth-lite
+
+# Enable stealth mode
+uv run --env-file .env scripts/eval_smooth.py --stealth-mode --max-steps 64
+```
+
+Results are saved to `results/smooth.jsonl`.
 
 ## Evaluation Dataset
 
