@@ -1,6 +1,14 @@
+from __future__ import annotations
+
 from typing import Literal
 
 from pydantic import BaseModel
+
+
+def load_tasks(path: str = "tasks.jsonl") -> list[Task]:
+    """Load tasks from a JSONL file."""
+    with open(path) as f:
+        return [Task.model_validate_json(line) for line in f if line.strip()]
 
 
 class Task(BaseModel):
@@ -28,3 +36,24 @@ class Task(BaseModel):
     # exact_match: exact-match evaluation possible
     # llm_judge: needs VLM judge
     answer_type: Literal["exact_match", "llm_judge"]
+
+
+class EvaluationResult(BaseModel):
+    # Unique evaluation identifier
+    task_id: str
+    # Name of the agent (e.g. "browser-use")
+    agent: str
+    # Model used (e.g. "gpt-4o")
+    model: str
+    # Agent's raw answer
+    answer: str
+    # Correctness
+    is_correct: bool
+    # Explanation from judge (only if llm_judge)
+    reason: str | None
+    # Performance metrics
+    steps: int
+    duration_seconds: float
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
