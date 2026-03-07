@@ -6,7 +6,7 @@ Quick evaluation of browser agents, inspired by [WebVoyager](https://github.com/
 
 | Agent | Model | Overall | Cost |
 | --- | --- | --- | --- |
-| [smooth](results/smooth.jsonl) | smooth | 11/26 (42.3%) | $2.15 |
+| [smooth](https://www.smooth.sh/) | smooth | 11/26 (42.3%) | $2.15 |
 
 ## Usage
 
