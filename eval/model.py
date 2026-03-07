@@ -51,6 +51,8 @@ class EvaluationResult(BaseModel):
     is_correct: bool
     # Explanation from judge (only if llm_judge)
     reason: str | None
+    # Error message if agent failed
+    error: str | None = None
     # Performance metrics
     steps: int
     duration_seconds: float

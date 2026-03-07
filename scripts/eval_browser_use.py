@@ -161,6 +161,7 @@ async def main() -> None:
                 prompt_tokens = usage.total_prompt_tokens if usage else 0
                 completion_tokens = usage.total_completion_tokens if usage else 0
                 total_tokens = usage.total_tokens if usage else 0
+                error = None
             except Exception as e:
                 print(f"  ERROR: {e}")
                 answer = ""
@@ -169,18 +170,35 @@ async def main() -> None:
                 prompt_tokens = 0
                 completion_tokens = 0
                 total_tokens = 0
+                error = str(e)
 
-            result = judge_task(
-                task,
-                agent_name,
-                args.model,
-                answer,
-                steps=steps,
-                duration_seconds=duration_seconds,
-                prompt_tokens=prompt_tokens,
-                completion_tokens=completion_tokens,
-                total_tokens=total_tokens,
-            )
+            if error:
+                result = EvaluationResult(
+                    task_id=task.id,
+                    agent=agent_name,
+                    model=args.model,
+                    answer=answer,
+                    is_correct=False,
+                    reason=None,
+                    error=error,
+                    steps=steps,
+                    duration_seconds=duration_seconds,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    total_tokens=total_tokens,
+                )
+            else:
+                result = judge_task(
+                    task,
+                    agent_name,
+                    args.model,
+                    answer,
+                    steps=steps,
+                    duration_seconds=duration_seconds,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    total_tokens=total_tokens,
+                )
             results.append(result)
 
             f.write(result.model_dump_json() + "\n")
