@@ -1,0 +1,198 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#   "eval",
+#   "browser-use==0.12.1",
+# ]
+# [tool.uv.sources]
+# eval = { path = ".." }
+# ///
+from __future__ import annotations
+
+import argparse
+import asyncio
+import sys
+from collections import Counter
+from pathlib import Path
+
+from browser_use.agent.service import Agent
+from browser_use.agent.views import AgentHistoryList
+from browser_use.browser.profile import BrowserProfile
+from browser_use.llm.openai.chat import ChatOpenAI
+
+from eval.judge import exact_match, llm_judge
+from eval.model import EvaluationResult, Task, load_tasks
+
+TASK_PROMPT = """Go to {web_url} ({web_title}) and complete the following task:
+{task}
+
+Provide ONLY the final answer with no extra explanation."""
+
+
+def create_llm(model: str):
+    return ChatOpenAI(model=model)
+
+
+async def run_task(
+    task: Task, llm, browser_profile: BrowserProfile, max_steps: int
+) -> AgentHistoryList:
+    prompt = TASK_PROMPT.format(
+        web_url=task.web_url, web_title=task.web_title, task=task.task
+    )
+    agent = Agent(task=prompt, llm=llm, browser_profile=browser_profile)
+    return await agent.run(max_steps=max_steps)
+
+
+def judge_task(
+    task: Task,
+    agent_name: str,
+    model: str,
+    answer: str,
+    *,
+    steps: int,
+    duration_seconds: float,
+    prompt_tokens: int,
+    completion_tokens: int,
+    total_tokens: int,
+) -> EvaluationResult:
+    kwargs = dict(
+        steps=steps,
+        duration_seconds=duration_seconds,
+        prompt_tokens=prompt_tokens,
+        completion_tokens=completion_tokens,
+        total_tokens=total_tokens,
+    )
+    if task.answer_type == "llm_judge":
+        return llm_judge(task, agent_name, model, answer, **kwargs)
+    return exact_match(task, agent_name, model, answer, **kwargs)
+
+
+def print_summary(results: list[EvaluationResult], tasks: list[Task]) -> None:
+    task_map = {t.id: t for t in tasks}
+    total = len(results)
+    correct = sum(r.is_correct for r in results)
+
+    print("\n" + "=" * 60)
+    print(f"Results: {correct}/{total} ({correct / total * 100:.1f}%)")
+    print("=" * 60)
+
+    # Breakdown by level
+    level_total: Counter[str] = Counter()
+    level_correct: Counter[str] = Counter()
+    for r in results:
+        t = task_map[r.task_id]
+        level_total[t.level] += 1
+        if r.is_correct:
+            level_correct[t.level] += 1
+
+    print("\nBy difficulty:")
+    for level in ("easy", "medium", "hard"):
+        t, c = level_total[level], level_correct[level]
+        if t:
+            print(f"  {level:8s}: {c}/{t} ({c / t * 100:.1f}%)")
+
+    # Breakdown by task type
+    type_total: Counter[str] = Counter()
+    type_correct: Counter[str] = Counter()
+    for r in results:
+        t = task_map[r.task_id]
+        type_total[t.task_type] += 1
+        if r.is_correct:
+            type_correct[t.task_type] += 1
+
+    print("\nBy task type:")
+    for task_type in ("lookup", "filter", "compare", "compute", "multi-step"):
+        t, c = type_total[task_type], type_correct[task_type]
+        if t:
+            print(f"  {task_type:12s}: {c}/{t} ({c / t * 100:.1f}%)")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Evaluate browser-use agent")
+    parser.add_argument("--model", default="gpt-4o", help="LLM model name")
+    parser.add_argument(
+        "--tasks-file", default="tasks.jsonl", help="Path to tasks JSONL"
+    )
+    parser.add_argument(
+        "--output", default="results/browser-use.jsonl", help="Output JSONL path"
+    )
+    parser.add_argument(
+        "--max-steps", type=int, default=100, help="Max agent steps per task"
+    )
+    parser.add_argument(
+        "--headless", action=argparse.BooleanOptionalAction, default=True
+    )
+    parser.add_argument(
+        "--task-id", action="append", help="Filter to specific task IDs"
+    )
+    return parser.parse_args()
+
+
+async def main() -> None:
+    args = parse_args()
+    tasks = load_tasks(args.tasks_file)
+
+    if args.task_id:
+        task_ids = set(args.task_id)
+        tasks = [t for t in tasks if t.id in task_ids]
+        if not tasks:
+            print(f"No tasks matched: {args.task_id}", file=sys.stderr)
+            sys.exit(1)
+
+    llm = create_llm(args.model)
+    agent_name = "browser-use"
+    browser_profile = BrowserProfile(headless=args.headless)
+
+    output_path = Path(args.output)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    results: list[EvaluationResult] = []
+
+    with open(output_path, "w") as f:
+        for i, task in enumerate(tasks, 1):
+            print(f"\n[{i}/{len(tasks)}] {task.id}: {task.task[:80]}")
+
+            try:
+                history = await run_task(task, llm, browser_profile, args.max_steps)
+                answer = history.final_result() or ""
+                steps = history.number_of_steps()
+                duration_seconds = history.total_duration_seconds()
+                usage = history.usage
+                prompt_tokens = usage.total_prompt_tokens if usage else 0
+                completion_tokens = usage.total_completion_tokens if usage else 0
+                total_tokens = usage.total_tokens if usage else 0
+            except Exception as e:
+                print(f"  ERROR: {e}")
+                answer = ""
+                steps = 0
+                duration_seconds = 0.0
+                prompt_tokens = 0
+                completion_tokens = 0
+                total_tokens = 0
+
+            result = judge_task(
+                task,
+                agent_name,
+                args.model,
+                answer,
+                steps=steps,
+                duration_seconds=duration_seconds,
+                prompt_tokens=prompt_tokens,
+                completion_tokens=completion_tokens,
+                total_tokens=total_tokens,
+            )
+            results.append(result)
+
+            f.write(result.model_dump_json() + "\n")
+            f.flush()
+
+            correct_so_far = sum(r.is_correct for r in results)
+            status = "CORRECT" if result.is_correct else "WRONG"
+            print(f"  Answer: {answer[:120]}")
+            print(f"  {status} (running: {correct_so_far}/{i})")
+
+    print_summary(results, tasks)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

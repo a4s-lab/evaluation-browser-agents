@@ -5,8 +5,8 @@ description = "Evaluation of browser agents"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "openai>=2.26.0",
-    "pydantic>=2.12.5",
+    "openai",
+    "pydantic>=2.12,<2.13",
 ]
 
 [tool.uv]

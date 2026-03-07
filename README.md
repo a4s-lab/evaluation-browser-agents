@@ -2,6 +2,36 @@
 
 Quick evaluation of browser agents, inspired by [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
+## Usage
+
+### Prerequisites
+
+```bash
+cp .env.example .env
+# Fill in your API keys in .env
+```
+
+### browser-use
+
+```bash
+# Run all tasks
+uv run --env-file .env scripts/eval_browser_use.py --model gpt-4o --headless
+
+# Run specific tasks
+uv run --env-file .env scripts/eval_browser_use.py --model gpt-4o --task-id "Wolfram Alpha--1"
+
+# Use Anthropic models
+uv run --env-file .env scripts/eval_browser_use.py --model claude-sonnet-4-20250514
+
+# Use OpenRouter
+uv run --env-file .env scripts/eval_browser_use.py --provider openrouter --model "deepseek/deepseek-v3.2"
+
+# Show browser window
+uv run --env-file .env scripts/eval_browser_use.py --model gpt-4o --no-headless --max-steps 50
+```
+
+Results are saved to `results/browser-use.jsonl`.
+
 ## Evaluation Dataset
 
 Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
