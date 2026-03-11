@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import sys
+import time
 from collections import Counter
 from pathlib import Path
 
@@ -114,7 +115,7 @@ def parse_args() -> argparse.Namespace:
         "--tasks-file", default="tasks.jsonl", help="Path to tasks JSONL"
     )
     parser.add_argument(
-        "--output", default="results/browser-use.jsonl", help="Output JSONL path"
+        "--output-dir", default="results", help="Output directory"
     )
     parser.add_argument(
         "--max-steps", type=int, default=100, help="Max agent steps per task"
@@ -143,8 +144,9 @@ async def main() -> None:
     agent_name = "browser-use"
     browser_profile = BrowserProfile(headless=args.headless)
 
-    output_path = Path(args.output)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / f"browser-use-{int(time.time())}.jsonl"
 
     results: list[EvaluationResult] = []
 

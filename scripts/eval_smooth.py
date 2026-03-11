@@ -125,7 +125,7 @@ def parse_args() -> argparse.Namespace:
         "--tasks-file", default="tasks.jsonl", help="Path to tasks JSONL"
     )
     parser.add_argument(
-        "--output", default="results/smooth.jsonl", help="Output JSONL path"
+        "--output-dir", default="results", help="Output directory"
     )
     parser.add_argument(
         "--max-steps", type=int, default=32, help="Max agent steps per task (2-128)"
@@ -153,8 +153,9 @@ def main() -> None:
     client = SmoothClient()
     agent_name = "smooth"
 
-    output_path = Path(args.output)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / f"smooth-{int(time.time())}.jsonl"
 
     results: list[EvaluationResult] = []
 
