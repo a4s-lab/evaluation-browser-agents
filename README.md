@@ -4,11 +4,11 @@ Quick evaluation of browser agents, inspired by [WebVoyager](https://github.com/
 
 ## Result
 
-| Agent | Model | Overall | Cost | Duration |
-| --- | --- | --- | --- | --- |
-| [smooth](https://www.smooth.sh/) | smooth | 11/26 (42.3%) | $2.15 | 11s |
-| [browser-use](https://github.com/browser-use/browser-use) | qwen/qwen3.5-122b-a10b | 11/26 (42.3%) | <$2.5 | 46m |
-| [browser-use](https://github.com/browser-use/browser-use) | qwen3.5-27b | 8/26 (30.8%) | $2.47 | 1h 55m |
+| Agent | Model | Overall | Cost | Duration | Result |
+| --- | --- | --- | --- | --- | --- |
+| [smooth](https://www.smooth.sh/) | smooth | 11/26 (42.3%) | $2.15 | 11s | [result](results/smooth-1772886148.jsonl) |
+| [browser-use](https://github.com/browser-use/browser-use) | qwen/qwen3.5-122b-a10b | 11/26 (42.3%) | <$2.5 | 46m | [result](results/browser-use-1773118672.jsonl) |
+| [browser-use](https://github.com/browser-use/browser-use) | qwen3.5-27b | 8/26 (30.8%) | $2.47 | 1h 55m | [result](results/browser-use-1773242158.jsonl) |
 
 ## Usage
 
@@ -38,7 +38,7 @@ uv run --env-file .env scripts/eval_browser_use.py --provider openrouter --model
 uv run --env-file .env scripts/eval_browser_use.py --model gpt-4o --no-headless --max-steps 50
 ```
 
-Results are saved to `results/browser-use.jsonl`.
+Results are saved to `results/browser-use-<timestamp>.jsonl`.
 
 ### smooth
 
@@ -58,7 +58,26 @@ uv run --env-file .env scripts/eval_smooth.py --model smooth-lite
 uv run --env-file .env scripts/eval_smooth.py --stealth-mode --max-steps 64
 ```
 
-Results are saved to `results/smooth.jsonl`.
+Results are saved to `results/smooth-<timestamp>.jsonl`.
+
+### a4s
+
+```bash
+# Run all tasks
+uv run --env-file .env scripts/eval_a4s.py --binary /path/to/a4s
+
+# With OpenRouter provider and lite model
+uv run --env-file .env scripts/eval_a4s.py --binary /path/to/a4s \
+  --provider openrouter --model qwen/qwen3.5-122b-a10b --lite-model openai/gpt-oss-120b:nitro
+
+# Run specific tasks
+uv run --env-file .env scripts/eval_a4s.py --binary /path/to/a4s --task-id "Wolfram Alpha--1"
+
+# Show browser window
+uv run --env-file .env scripts/eval_a4s.py --binary /path/to/a4s --no-headless --max-steps 100
+```
+
+Results are saved to `results/a4s-<timestamp>.jsonl`.
 
 ## Evaluation Dataset
 
