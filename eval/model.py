@@ -33,9 +33,6 @@ class Task(BaseModel):
     # compute: calculation using web-sourced data
     # multi-step: chain multiple searches/reasoning
     task_type: Literal["lookup", "filter", "compare", "compute", "multi-step"]
-    # exact_match: exact-match evaluation possible
-    # llm_judge: needs VLM judge
-    answer_type: Literal["exact_match", "llm_judge"]
 
 
 class EvaluationResult(BaseModel):

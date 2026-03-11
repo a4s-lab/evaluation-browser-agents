@@ -1,5 +1,4 @@
 import os
-import re
 
 from openai import OpenAI
 
@@ -25,44 +24,6 @@ You should elaborate on how you arrived at your final evaluation and then provid
 JUDGE_USER_PROMPT = """TASK: {task}
 Reference Answer: {reference}
 Result Response: {predicted}"""
-
-
-def _normalize(s: str) -> str:
-    """Lowercase, strip, and collapse whitespace."""
-    s = s.lower().strip()
-    s = re.sub(r"\s+", " ", s)
-    return s
-
-
-def exact_match(
-    task: Task,
-    agent: str,
-    model: str,
-    predicted: str,
-    *,
-    steps: int,
-    duration_seconds: float,
-    prompt_tokens: int,
-    completion_tokens: int,
-    total_tokens: int,
-) -> EvaluationResult:
-    """Check if the reference answer appears in the predicted answer after normalization."""
-    norm_pred = _normalize(predicted)
-    norm_ref = _normalize(task.answer)
-    is_correct = norm_ref in norm_pred
-    return EvaluationResult(
-        task_id=task.id,
-        agent=agent,
-        model=model,
-        answer=predicted,
-        is_correct=is_correct,
-        reason=None,
-        steps=steps,
-        duration_seconds=duration_seconds,
-        prompt_tokens=prompt_tokens,
-        completion_tokens=completion_tokens,
-        total_tokens=total_tokens,
-    )
 
 
 def llm_judge(

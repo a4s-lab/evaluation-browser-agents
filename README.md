@@ -108,7 +108,6 @@ Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 - **compute: 3** - calculation using web-sourced data
 - **multi-step: 3** - chain multiple searches/reasoning
 
-### By answer type
+### Evaluation
 
-- **exact_match: 22** - exact-match evaluation possible
-- **llm_judge: 4** - needs GPT-4V judge
+All 26 tasks are evaluated using an LLM judge (GPT-4o by default).

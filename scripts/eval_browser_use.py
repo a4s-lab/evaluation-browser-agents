@@ -21,7 +21,7 @@ from browser_use.agent.views import AgentHistoryList
 from browser_use.browser.profile import BrowserProfile
 from browser_use.llm.openai.chat import ChatOpenAI
 
-from eval.judge import exact_match, llm_judge
+from eval.judge import llm_judge
 from eval.model import EvaluationResult, Task, load_tasks
 
 TASK_PROMPT = """Go to {web_url} ({web_title}) and complete the following task:
@@ -63,9 +63,7 @@ def judge_task(
         completion_tokens=completion_tokens,
         total_tokens=total_tokens,
     )
-    if task.answer_type == "llm_judge":
-        return llm_judge(task, agent_name, model, answer, **kwargs)
-    return exact_match(task, agent_name, model, answer, **kwargs)
+    return llm_judge(task, agent_name, model, answer, **kwargs)
 
 
 def print_summary(results: list[EvaluationResult], tasks: list[Task]) -> None:
