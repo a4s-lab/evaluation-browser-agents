@@ -8,6 +8,7 @@ Quick evaluation of browser agents, inspired by [WebVoyager](https://github.com/
 | --- | --- | --- | --- | --- | --- |
 | [smooth](https://www.smooth.sh/) | smooth | 11/26 (42.3%) | $2.15 | 11s | [result](results/smooth-1772886148.jsonl) |
 | [browser-use](https://github.com/browser-use/browser-use) | qwen/qwen3.5-122b-a10b | 11/26 (42.3%) | <$2.5 | 46m | [result](results/browser-use-1773118672.jsonl) |
+| a4s | qwen/qwen3.5-122b-a10b | 10/26 (38.5%) | <$4 | 1h 51m | [result](results/a4s-1773241954.jsonl) |
 | [browser-use](https://github.com/browser-use/browser-use) | qwen3.5-27b | 8/26 (30.8%) | $2.47 | 1h 55m | [result](results/browser-use-1773242158.jsonl) |
 
 ## Usage
