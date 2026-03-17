@@ -4,14 +4,12 @@ Quick evaluation of browser agents, inspired by [WebVoyager](https://github.com/
 
 ## Result
 
-| Agent | Model | Overall | Cost | Duration | Result |
-| --- | --- | --- | --- | --- | --- |
-| [smooth](https://www.smooth.sh/) | smooth | 19/26 (73.1%) | $2.15 | 11s | [result](results/smooth-1772886148.jsonl) |
-| [browser-use](https://github.com/browser-use/browser-use) | qwen/qwen3.5-122b-a10b | 16/24 (66.7%) | <$2.5 | 46m | [result](results/browser-use-1773118672.jsonl) |
-| [browser-use](https://github.com/browser-use/browser-use) | qwen3.5-27b | 15/23 (65.2%) | $2.47 | 1h 55m | [result](results/browser-use-1773242158.jsonl) |
-| a4s | qwen/qwen3.5-122b-a10b | 10/19 (52.6%) | <$4 | 1h 51m | [result](results/a4s-1773241954.jsonl) |
-
-Tasks where the agent was blocked by CAPTCHA or bot detection (Cloudflare, reCAPTCHA, anti-bot warnings) are excluded from the total count, as they reflect infrastructure limitations rather than agent capability.
+| Agent | Model | Overall | Environment | Cost | Duration | Result |
+| --- | --- | --- | --- | --- | --- | --- |
+| [smooth](https://www.smooth.sh/) | smooth | 19/26 (73.1%) | smooth cloud | $2.15 | 11s | [result](results/smooth-1772886148.jsonl) |
+| [browser-use](https://github.com/browser-use/browser-use) | qwen/qwen3.5-122b-a10b | 16/24 (66.7%) | local | <$2.5 | 46m | [result](results/browser-use-1773118672.jsonl) |
+| a4s | qwen/qwen3.5-122b-a10b | 16/26 (61.5%) | local | <$4 | 1h 51m | [result](results/a4s-1773241954.jsonl) |
+| [browser-use](https://github.com/browser-use/browser-use) | qwen3.5-27b | 15/23 (65.2%) | local | $2.47 | 1h 55m | [result](results/browser-use-1773242158.jsonl) |
 
 ## Usage
 
@@ -78,6 +76,16 @@ uv run --env-file .env scripts/eval_a4s.py --binary /path/to/a4s --task-id "Wolf
 
 # Show browser window
 uv run --env-file .env scripts/eval_a4s.py --binary /path/to/a4s --no-headless --max-steps 100
+```
+
+To use [Browserbase](https://www.browserbase.com/) cloud browsers (bypasses anti-bot detection):
+
+```bash
+export BROWSERBASE_API_KEY=<your-key>
+export BROWSERBASE_PROJECT_ID=<your-project-id>
+uv run --env-file .env scripts/eval_a4s.py --binary /path/to/a4s \
+  --provider openrouter --model qwen/qwen3.5-122b-a10b --lite-model openai/gpt-oss-120b:nitro \
+  --no-headless
 ```
 
 Results are saved to `results/a4s-<timestamp>.jsonl`.
