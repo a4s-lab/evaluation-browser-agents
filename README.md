@@ -2,14 +2,14 @@
 
 Quick evaluation of browser agents, inspired by [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
-## Result
+## Result with [sample 26 tasks](#sample-26-tasks)
 
-| Agent | Model | Overall | Environment | Cost | Duration | Result |
-| --- | --- | --- | --- | --- | --- | --- |
-| [smooth](https://www.smooth.sh/) | smooth | 19/26 (73.1%) | smooth cloud | $2.15 | 11s | [result](results/smooth-1772886148.jsonl) |
-| [browser-use](https://github.com/browser-use/browser-use) | qwen/qwen3.5-122b-a10b | 16/26 (61.5%) | local | <$2.5 | 46m | [result](results/browser-use-1773118672.jsonl) |
-| a4s | qwen/qwen3.5-122b-a10b | 16/26 (61.5%) | local | <$4 | 1h 51m | [result](results/a4s-1773241954.jsonl) |
-| [browser-use](https://github.com/browser-use/browser-use) | qwen3.5-27b | 15/26 (57.7%) | local | $2.47 | 1h 55m | [result](results/browser-use-1773242158.jsonl) |
+| Agent                                                     | Model                  | Overall       | Environment  | Cost  | Duration | Result                                         |
+| --------------------------------------------------------- | ---------------------- | ------------- | ------------ | ----- | -------- | ---------------------------------------------- |
+| [smooth](https://www.smooth.sh/)                          | smooth                 | 19/26 (73.1%) | smooth cloud | $2.15 | 11s      | [result](results/smooth-1772886148.jsonl)      |
+| [browser-use](https://github.com/browser-use/browser-use) | qwen/qwen3.5-122b-a10b | 16/26 (61.5%) | local        | <$2.5 | 46m      | [result](results/browser-use-1773118672.jsonl) |
+| a4s                                                       | qwen/qwen3.5-122b-a10b | 16/26 (61.5%) | local        | <$4   | 1h 51m   | [result](results/a4s-1773241954.jsonl)         |
+| [browser-use](https://github.com/browser-use/browser-use) | qwen3.5-27b            | 15/26 (57.7%) | local        | $2.47 | 1h 55m   | [result](results/browser-use-1773242158.jsonl) |
 
 ## Usage
 
@@ -92,26 +92,28 @@ Results are saved to `results/a4s-<timestamp>.jsonl`.
 
 ## Evaluation Dataset
 
+### Sample 26 tasks
+
 Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
-| Website | Easy | Medium | Hard | Total |
-| --- | --- | --- | --- | --- |
-| Wolfram Alpha | 2 | 1 | - | 3 |
-| Google Map | 1 | 2 | - | 3 |
-| BBC News | 1 | 2 | - | 3 |
-| ArXiv | 2 | 1 | - | 3 |
-| Allrecipes | 1 | 2 | - | 3 |
-| Amazon | 1 | 1 | 1 | 3 |
-| GitHub | 2 | 1 | - | 3 |
-| Google Search (GAIA) | - | 2 | 3 | 5 |
+| Website              | Easy | Medium | Hard | Total |
+| -------------------- | ---- | ------ | ---- | ----- |
+| Wolfram Alpha        | 2    | 1      | -    | 3     |
+| Google Map           | 1    | 2      | -    | 3     |
+| BBC News             | 1    | 2      | -    | 3     |
+| ArXiv                | 2    | 1      | -    | 3     |
+| Allrecipes           | 1    | 2      | -    | 3     |
+| Amazon               | 1    | 1      | 1    | 3     |
+| GitHub               | 2    | 1      | -    | 3     |
+| Google Search (GAIA) | -    | 2      | 3    | 5     |
 
-### By difficulty
+#### By difficulty
 
 - **Easy: 10** - single-step lookups, simple queries
 - **Medium: 11** - multi-constraint filters, comparisons
 - **Hard: 5** - multi-step reasoning, cross-source
 
-### By task type
+#### By task type
 
 - **lookup: 11** - find specific info on a page
 - **filter: 7** - search with constraints (rating, price, date)
@@ -119,6 +121,42 @@ Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 - **compute: 3** - calculation using web-sourced data
 - **multi-step: 3** - chain multiple searches/reasoning
 
+### Full Dataset
+
+528 tasks across 15 websites from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
+
+| Website              | Easy | Medium | Hard | Total |
+| -------------------- | ---- | ------ | ---- | ----- |
+| Allrecipes           | 6    | 29     | 4    | 39    |
+| Amazon               | 5    | 23     | 10   | 38    |
+| Apple                | 21   | 12     | -    | 33    |
+| ArXiv                | 19   | 17     | 6    | 42    |
+| BBC News             | 12   | 20     | 3    | 35    |
+| Booking              | 5    | 6      | -    | 11    |
+| Cambridge Dictionary | 31   | 9      | 3    | 43    |
+| Coursera             | 8    | 30     | 2    | 40    |
+| ESPN                 | 22   | 16     | 2    | 40    |
+| GitHub               | 21   | 19     | -    | 40    |
+| Google Flights       | 5    | 3      | -    | 8     |
+| Google Map           | 20   | 15     | 3    | 38    |
+| Google Search        | 28   | 6      | 6    | 40    |
+| Huggingface          | 14   | 21     | -    | 35    |
+| Wolfram Alpha        | 27   | 17     | 2    | 46    |
+
+#### By difficulty
+
+- **Easy: 244 (46.2%)** - single-step lookups, simple queries
+- **Medium: 243 (46.0%)** - multi-constraint filters, comparisons
+- **Hard: 41 (7.8%)** - multi-step reasoning, cross-source
+
+#### By task type
+
+- **lookup: 326 (61.7%)** - find specific info on a page
+- **filter: 145 (27.5%)** - search with constraints (rating, price, date)
+- **compute: 28 (5.3%)** - calculation using web-sourced data
+- **multi-step: 18 (3.4%)** - chain multiple searches/reasoning
+- **compare: 11 (2.1%)** - compare values across sections
+
 ### Evaluation
 
-All 26 tasks are evaluated using an LLM judge (GPT-4o by default).
+All tasks are evaluated using an LLM judge (GPT-4o by default).
