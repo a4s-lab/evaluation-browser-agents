@@ -123,39 +123,38 @@ Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
 ### Full Dataset
 
-528 tasks across 15 websites from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
+481 tasks across 14 websites from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
-| Website              | Easy | Medium | Hard | Total |
-| -------------------- | ---- | ------ | ---- | ----- |
-| Allrecipes           | 6    | 29     | 4    | 39    |
-| Amazon               | 5    | 23     | 10   | 38    |
-| Apple                | 21   | 12     | -    | 33    |
-| ArXiv                | 19   | 17     | 6    | 42    |
-| BBC News             | 12   | 20     | 3    | 35    |
-| Booking              | 5    | 6      | -    | 11    |
-| Cambridge Dictionary | 31   | 9      | 3    | 43    |
-| Coursera             | 8    | 30     | 2    | 40    |
-| ESPN                 | 22   | 16     | 2    | 40    |
-| GitHub               | 21   | 19     | -    | 40    |
-| Google Flights       | 5    | 3      | -    | 8     |
-| Google Map           | 20   | 15     | 3    | 38    |
-| Google Search        | 28   | 6      | 6    | 40    |
-| Huggingface          | 14   | 21     | -    | 35    |
-| Wolfram Alpha        | 27   | 17     | 2    | 46    |
+| Website        | Easy | Medium | Hard | Total |
+| -------------- | ---- | ------ | ---- | ----- |
+| Allrecipes     | 6    | 29     | 4    | 39    |
+| Amazon         | 6    | 23     | 9    | 38    |
+| Apple          | 20   | 12     | -    | 32    |
+| ArXiv          | 18   | 17     | 6    | 41    |
+| BBC News       | 12   | 20     | 3    | 35    |
+| Booking        | 5    | 6      | -    | 11    |
+| Coursera       | 8    | 30     | 2    | 40    |
+| ESPN           | 22   | 16     | 2    | 40    |
+| GitHub         | 21   | 19     | -    | 40    |
+| Google Flights | 5    | 3      | -    | 8     |
+| Google Map     | 20   | 15     | 3    | 38    |
+| Google Search  | 28   | 6      | 6    | 40    |
+| Huggingface    | 13   | 20     | -    | 33    |
+| Wolfram Alpha  | 27   | 17     | 2    | 46    |
 
 #### By difficulty
 
-- **Easy: 244 (46.2%)** - single-step lookups, simple queries
-- **Medium: 243 (46.0%)** - multi-constraint filters, comparisons
-- **Hard: 41 (7.8%)** - multi-step reasoning, cross-source
+- **Easy: 211 (43.9%)** - single-step lookups, simple queries
+- **Medium: 233 (48.4%)** - multi-constraint filters, comparisons
+- **Hard: 37 (7.7%)** - multi-step reasoning, cross-source
 
 #### By task type
 
-- **lookup: 326 (61.7%)** - find specific info on a page
-- **filter: 145 (27.5%)** - search with constraints (rating, price, date)
-- **compute: 28 (5.3%)** - calculation using web-sourced data
-- **multi-step: 18 (3.4%)** - chain multiple searches/reasoning
-- **compare: 11 (2.1%)** - compare values across sections
+- **lookup: 283 (58.8%)** - find specific info on a page
+- **filter: 145 (30.1%)** - search with constraints (rating, price, date)
+- **compute: 28 (5.8%)** - calculation using web-sourced data
+- **multi-step: 14 (2.9%)** - chain multiple searches/reasoning
+- **compare: 11 (2.3%)** - compare values across sections
 
 ### Evaluation
 
