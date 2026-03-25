@@ -123,7 +123,18 @@ Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
 ### Full Dataset
 
-481 tasks across 14 websites from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
+541 tasks across 14 websites from [WebVoyager](https://github.com/MinorJerry/WebVoyager/blob/main/data/WebVoyager_data.jsonl).
+
+102 tasks excluded from the original 643.
+
+Excluded impossible tasks:
+
+- 55 tasks mentioned by [browser-use](https://github.com/browser-use/eval/blob/main/data/WebVoyagerImpossibleTasks.json).
+- 43 tasks for `Cambridge Dictionary` removed due to access failure.
+- `Huggingface--34`
+- `Huggingface--39`
+- `Apple--5`
+- `ArXiv--25`
 
 | Website        | Easy | Medium | Hard | Total |
 | -------------- | ---- | ------ | ---- | ----- |
@@ -132,11 +143,11 @@ Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 | Apple          | 20   | 12     | -    | 32    |
 | ArXiv          | 18   | 17     | 6    | 41    |
 | BBC News       | 12   | 20     | 3    | 35    |
-| Booking        | 5    | 6      | -    | 11    |
+| Booking        | 7    | 25     | 8    | 40    |
 | Coursera       | 8    | 30     | 2    | 40    |
 | ESPN           | 22   | 16     | 2    | 40    |
 | GitHub         | 21   | 19     | -    | 40    |
-| Google Flights | 5    | 3      | -    | 8     |
+| Google Flights | 16   | 22     | 1    | 39    |
 | Google Map     | 20   | 15     | 3    | 38    |
 | Google Search  | 28   | 6      | 6    | 40    |
 | Huggingface    | 13   | 20     | -    | 33    |
@@ -144,17 +155,17 @@ Sampled 26 tasks from [WebVoyager](https://github.com/MinorJerry/WebVoyager).
 
 #### By difficulty
 
-- **Easy: 211 (43.9%)** - single-step lookups, simple queries
-- **Medium: 233 (48.4%)** - multi-constraint filters, comparisons
-- **Hard: 37 (7.7%)** - multi-step reasoning, cross-source
+- **Easy: 224 (41.4%)** - single-step lookups, simple queries
+- **Medium: 271 (50.1%)** - multi-constraint filters, comparisons
+- **Hard: 46 (8.5%)** - multi-step reasoning, cross-source
 
 #### By task type
 
-- **lookup: 283 (58.8%)** - find specific info on a page
-- **filter: 145 (30.1%)** - search with constraints (rating, price, date)
-- **compute: 28 (5.8%)** - calculation using web-sourced data
-- **multi-step: 14 (2.9%)** - chain multiple searches/reasoning
-- **compare: 11 (2.3%)** - compare values across sections
+- **lookup: 284 (52.5%)** - find specific info on a page
+- **filter: 194 (35.9%)** - search with constraints (rating, price, date)
+- **compute: 32 (5.9%)** - calculation using web-sourced data
+- **compare: 16 (3.0%)** - compare values across sections
+- **multi-step: 15 (2.8%)** - chain multiple searches/reasoning
 
 ### Evaluation
 
